@@ -7,7 +7,6 @@ A hidden view that only appears in screenshots and screen recordings.
 | What users see                                    | Captured                                            |
 | ------------------------------------------------- | --------------------------------------------------- |
 | ![User view](example/assets/readme/1.png)         | ![Captured screenshot](example/assets/readme/2.png) |
-| <video src="example/assets/readme/3.mov"></video> | <video src="example/assets/readme/4.mov"></video>   |
 
 ## Installation
 
