@@ -1,19 +1,6 @@
-import type { StyleProp, ViewStyle } from 'react-native';
+import type { ViewProps } from "react-native";
 
-export type OnLoadEventPayload = {
-  url: string;
-};
-
-export type ExpoWatermarkModuleEvents = {
-  onChange: (params: ChangeEventPayload) => void;
-};
-
-export type ChangeEventPayload = {
-  value: string;
-};
-
-export type ExpoWatermarkViewProps = {
-  url: string;
-  onLoad: (event: { nativeEvent: OnLoadEventPayload }) => void;
-  style?: StyleProp<ViewStyle>;
+export type ExpoWatermarkViewProps = ViewProps & {
+  backgroundColor?: string;
+  preview?: boolean;
 };

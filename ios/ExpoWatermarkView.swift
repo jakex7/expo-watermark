@@ -1,38 +1,47 @@
 import ExpoModulesCore
 import WebKit
 
-// This view will be used as a native component. Make sure to inherit from `ExpoView`
-// to apply the proper styling (e.g. border radius and shadows).
 class ExpoWatermarkView: ExpoView {
-  let webView = WKWebView()
-  let onLoad = EventDispatcher()
-  var delegate: WebViewDelegate?
-
+  private let secureField = UITextField()
+  private let coverView = UIView()
+  
   required init(appContext: AppContext? = nil) {
     super.init(appContext: appContext)
-    clipsToBounds = true
-    delegate = WebViewDelegate { url in
-      self.onLoad(["url": url])
-    }
-    webView.navigationDelegate = delegate
-    addSubview(webView)
+    setupMask()
   }
-
+  
+  private func setupMask() {
+    secureField.isSecureTextEntry = true
+    secureField.isUserInteractionEnabled = false
+    secureField.translatesAutoresizingMaskIntoConstraints = false
+    
+    if let textLayoutView = secureField.subviews.first {
+      coverView.translatesAutoresizingMaskIntoConstraints = false
+      textLayoutView.addSubview(coverView)
+      
+      NSLayoutConstraint.activate([
+        coverView.topAnchor.constraint(equalTo: textLayoutView.topAnchor),
+        coverView.bottomAnchor.constraint(equalTo: textLayoutView.bottomAnchor),
+        coverView.leadingAnchor.constraint(equalTo: textLayoutView.leadingAnchor),
+        coverView.trailingAnchor.constraint(equalTo: textLayoutView.trailingAnchor)
+      ])
+    }
+    
+    addSubview(secureField)
+  }
+  
   override func layoutSubviews() {
-    webView.frame = bounds
+    super.layoutSubviews()
+    
+    secureField.frame = bounds
+    bringSubviewToFront(secureField)
   }
-}
-
-class WebViewDelegate: NSObject, WKNavigationDelegate {
-  let onUrlChange: (String) -> Void
-
-  init(onUrlChange: @escaping (String) -> Void) {
-    self.onUrlChange = onUrlChange
+  
+  func setCoverColor(_ color: UIColor) {
+    coverView.backgroundColor = color
   }
-
-  func webView(_ webView: WKWebView, didFinish navigation: WKNavigation) {
-    if let url = webView.url {
-      onUrlChange(url.absoluteString)
-    }
+  
+  func setPreview(_ preview: Bool) {
+    coverView.alpha = preview ? 0.5 : 1.0
   }
 }
