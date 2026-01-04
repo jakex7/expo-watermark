@@ -1,7 +1,7 @@
 {
   "name": "expo-watermark",
   "version": "0.1.0",
-  "description": "Add watermark to screenshots and screen recordings",
+  "description": "A hidden view that only appears in screenshots and screen recordings",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "scripts": {

@@ -1,0 +1,56 @@
+# Expo Watermark
+
+A hidden view that only appears in screenshots and screen recordings.
+
+## Showcase
+
+| What users see                                    | Captured                                            |
+| ------------------------------------------------- | --------------------------------------------------- |
+| ![User view](example/assets/readme/1.png)         | ![Captured screenshot](example/assets/readme/2.png) |
+| <video src="example/assets/readme/3.mov"></video> | <video src="example/assets/readme/4.mov"></video>   |
+
+## Installation
+
+```bash
+yarn add expo-watermark
+```
+
+## Usage
+
+```tsx
+import { WatermarkView } from "expo-watermark";
+import { Image } from "react-native";
+
+export default function App() {
+  return (
+    <WatermarkView
+      backgroundColor="#fff"
+      preview={true}
+      style={{ marginLeft: "auto" }}
+    >
+      <Image
+        source={require("./assets/logo.png")}
+        resizeMode="contain"
+        style={{ width: 30, height: 30 }}
+      />
+    </WatermarkView>
+  );
+}
+```
+
+The watermark will be invisible during normal use but will appear on screenshots and screen recordings.
+
+## API
+
+### Props
+
+`WatermarkView` accepts all `View` props, plus:
+
+- **`backgroundColor`** (string, optional): Color of the cover view. Should match the background of the parent view. Can ve set via prop or style.
+- **`preview`** (boolean, optional): When `true`, shows the watermark content (with reduced opacity) in the app for preview purposes. Default is `false`.
+
+## License
+
+[MIT](https://github.com/jakex7/expo-screenshot/blob/main/LICENSE)
+
+### Made with ♥️ by Jakub Grzywacz
