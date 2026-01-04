@@ -1,9 +1,6 @@
 {
-  "platforms": ["apple", "android", "web"],
+  "platforms": ["apple"],
   "apple": {
     "modules": ["ExpoWatermarkModule"]
-  },
-  "android": {
-    "modules": ["expo.modules.watermark.ExpoWatermarkModule"]
   }
 }

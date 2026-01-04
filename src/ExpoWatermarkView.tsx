@@ -4,10 +4,13 @@ import * as React from "react";
 import { ExpoWatermarkViewProps } from "./ExpoWatermark.types";
 import { Platform, View } from "react-native";
 
-const NativeView: React.ComponentType<ExpoWatermarkViewProps> =
-  requireNativeView("ExpoWatermark");
+let NativeView: React.ComponentType<ExpoWatermarkViewProps>;
+
+if (Platform.OS === "ios") {
+  NativeView = requireNativeView("ExpoWatermark");
+}
 
 export default function ExpoWatermarkView(props: ExpoWatermarkViewProps) {
-  if (Platform.OS !== "ios") return <View {...props} />;
+  if (!NativeView) return <View {...props} />;
   return <NativeView {...props} />;
 }
