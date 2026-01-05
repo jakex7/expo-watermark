@@ -1,6 +1,6 @@
-import type { ViewProps } from "react-native";
+import type { ColorValue, ViewProps } from "react-native";
 
 export type ExpoWatermarkViewProps = ViewProps & {
-  backgroundColor?: string;
+  backgroundColor?: ColorValue;
   preview?: boolean;
 };

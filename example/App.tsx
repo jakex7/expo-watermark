@@ -53,6 +53,7 @@ const styles = {
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    margin: 24,
+    padding: 24,
+    paddingTop: 50,
   },
 };

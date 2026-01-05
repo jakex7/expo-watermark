@@ -1,13 +1,32 @@
 import { requireNativeView } from "expo";
 import * as React from "react";
+import {
+  Platform,
+  processColor,
+  ProcessedColorValue,
+  View,
+} from "react-native";
 
 import { ExpoWatermarkViewProps } from "./ExpoWatermark.types";
-import { Platform, View } from "react-native";
 
-const NativeView: React.ComponentType<ExpoWatermarkViewProps> =
-  requireNativeView("ExpoWatermark");
+const NativeView: React.ComponentType<
+  Omit<ExpoWatermarkViewProps, "backgroundColor"> & {
+    backgroundColor?: ProcessedColorValue;
+  }
+> = requireNativeView("ExpoWatermark");
 
 export default function ExpoWatermarkView(props: ExpoWatermarkViewProps) {
-  if (Platform.OS !== "ios") return <View {...props} />;
-  return <NativeView {...props} />;
+  const { style, backgroundColor, ...rest } = props;
+  const coverColor = processColor(
+    backgroundColor || (style as any)?.backgroundColor || "transparent",
+  )!;
+  if (Platform.OS === "android") {
+    const { children, ...androidRest } = rest;
+    return (
+      <NativeView style={style} backgroundColor={coverColor} {...androidRest}>
+        <View style={style}>{children}</View>
+      </NativeView>
+    );
+  }
+  return <NativeView style={style} backgroundColor={coverColor} {...rest} />;
 }

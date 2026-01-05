@@ -1,30 +1,64 @@
 package expo.modules.watermark
 
+import android.annotation.SuppressLint
 import android.content.Context
-import android.webkit.WebView
-import android.webkit.WebViewClient
+import android.view.View
+import android.widget.FrameLayout
 import expo.modules.kotlin.AppContext
-import expo.modules.kotlin.viewevent.EventDispatcher
 import expo.modules.kotlin.views.ExpoView
 
+@SuppressLint("ViewConstructor")
 class ExpoWatermarkView(context: Context, appContext: AppContext) : ExpoView(context, appContext) {
-  // Creates and initializes an event dispatcher for the `onLoad` event.
-  // The name of the event is inferred from the value and needs to match the event name defined in the module.
-  private val onLoad by EventDispatcher()
-
-  // Defines a WebView that will be used as the root subview.
-  internal val webView = WebView(context).apply {
-    layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
-    webViewClient = object : WebViewClient() {
-      override fun onPageFinished(view: WebView, url: String) {
-        // Sends an event to JavaScript. Triggers a callback defined on the view component in JavaScript.
-        onLoad(mapOf("url" to url))
-      }
-    }
+  internal val matchParent = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
+  internal val coverView = FrameLayout(context)
+  internal val layout = FrameLayout(context)
+  internal val recordingListener: (Boolean) -> Unit = { isRecording ->
+    coverView.visibility = if (isRecording) GONE else VISIBLE
   }
 
   init {
-    // Adds the WebView to the view hierarchy.
-    addView(webView)
+    layoutParams = matchParent
+    layout.apply {
+      layoutParams = matchParent
+      addView(
+        coverView,
+        matchParent
+      )
+    }
+    addView(layout, matchParent)
+    coverView.bringToFront()
+    ScreenRecordingState.addListener(recordingListener)
+  }
+
+  fun destroy() {
+    ScreenRecordingState.removeListener(recordingListener)
+  }
+
+  override fun addView(child: View?) {
+    layout.addView(child)
+  }
+
+  override fun addView(child: View?, index: Int) {
+    layout.addView(child, index)
+  }
+
+  override fun addView(child: View?, width: Int, height: Int) {
+    layout.addView(child, width, height)
+  }
+  override fun removeView(view: View?) {
+    layout.removeView(view)
+  }
+
+  override fun onViewAdded(child: View?) {
+    super.onViewAdded(child)
+    coverView.bringToFront()
+  }
+
+  fun setCoverColor(color: Int) {
+    coverView.setBackgroundColor(color)
+  }
+
+  fun setPreview(preview: Boolean) {
+    coverView.alpha = if (preview) 0.5f else 1.0f
   }
 }
